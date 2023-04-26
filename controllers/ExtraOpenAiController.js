@@ -145,7 +145,6 @@ const signatureController = async (req, res) => {
   try {
     const { photo } = req.body;
     const newPhoto = photo.substring(22);
-    console.log(newPhoto);
     const doc_base64 = newPhoto;
     const output_format = "snippets";
     const req_id = uuidv4();

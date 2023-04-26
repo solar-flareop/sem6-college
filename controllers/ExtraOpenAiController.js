@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const axios = require("axios");
 dotenv.config();
 const { v4: uuidv4 } = require("uuid");
 const { Configuration, OpenAIApi } = require("openai");
@@ -144,21 +145,24 @@ const signatureController = async (req, res) => {
   try {
     const { photo } = req.body;
     const newPhoto = photo.substring(22);
+    console.log(newPhoto);
     const doc_base64 = newPhoto;
     const output_format = "snippets";
     const req_id = uuidv4();
-    const resp = await fetch(
+    const { data } = await axios.post(
       "https://ping.arya.ai/api/v1/signature-detection",
       {
-        method: "POST",
+        output_format,
+        doc_base64,
+        req_id,
+      },
+      {
         headers: {
           token: process.env.SIGN_API,
           "content-type": "application/json",
         },
-        body: JSON.stringify({ output_format, doc_base64, req_id }),
       }
     );
-    const data = await resp.json();
     res.status(200).json({
       success: true,
       message: "api success",
